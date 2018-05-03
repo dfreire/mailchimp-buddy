@@ -18,26 +18,26 @@ export default function (config: Config) {
     const headers = { ...authHeader };
 
     return {
-        async list(config: Config) {
+        async list() {
             return await axios.get(baseUrl, { headers });
         },
 
-        async subscribe(email: string, config: Config) {
+        async subscribe(email: string) {
             const data = { status: 'subscribed' };
             return await axios.patch(`${baseUrl}/${md5(email)}`, data, { headers });
         },
 
-        async unsubscribe(email: string, config: Config) {
+        async unsubscribe(email: string) {
             const data = { status: 'unsubscribed' };
             return await axios.patch(`${baseUrl}/${md5(email)}`, data, { headers });
         },
 
-        async subscribeIfNew(email: string, config: Config) {
+        async subscribeIfNew(email: string) {
             const data = { email_address: email, status_if_new: 'subscribed' };
             return await axios.put(`${baseUrl}/${md5(email)}`, data, { headers });
         },
 
-        async remove(email: string, config: Config) {
+        async remove(email: string) {
             return await axios.delete(`${baseUrl}/${md5(email)}`, { headers });
         },
     }
