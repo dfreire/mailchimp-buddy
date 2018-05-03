@@ -3,6 +3,11 @@ export interface Config {
     apiKey: string;
     listId: string;
 }
+export interface Member {
+    id?: string;
+    email_address: string;
+    status: 'subscribed' | 'unsubscribed' | 'cleaned' | 'pending' | 'transactional';
+}
 export default function (config: Config): {
     list(): Promise<AxiosResponse<any>>;
     subscribe(email: string): Promise<AxiosResponse<any>>;

@@ -6,7 +6,7 @@ export interface Config {
     listId: string;
 }
 
-interface Member {
+export interface Member {
     id?: string;
     email_address: string;
     status: 'subscribed' | 'unsubscribed' | 'cleaned' | 'pending' | 'transactional';
