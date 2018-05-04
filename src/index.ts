@@ -22,6 +22,10 @@ export default function (config: Config) {
             return await axios.get(baseUrl, { headers });
         },
 
+        async get(email: string) {
+            return await axios.get(`${baseUrl}/${md5(email)}`, { headers });
+        },
+
         async subscribe(email: string) {
             const data = { status: 'subscribed' };
             return await axios.patch(`${baseUrl}/${md5(email)}`, data, { headers });

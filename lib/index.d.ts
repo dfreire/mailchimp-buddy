@@ -10,6 +10,7 @@ export interface Member {
 }
 export default function (config: Config): {
     list(): Promise<AxiosResponse<any>>;
+    get(email: string): Promise<AxiosResponse<any>>;
     subscribe(email: string): Promise<AxiosResponse<any>>;
     unsubscribe(email: string): Promise<AxiosResponse<any>>;
     subscribeIfNew(email: string): Promise<AxiosResponse<any>>;
