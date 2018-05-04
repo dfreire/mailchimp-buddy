@@ -13,5 +13,6 @@ export default function (config: Config): {
     subscribe(email: string): Promise<AxiosResponse<any>>;
     unsubscribe(email: string): Promise<AxiosResponse<any>>;
     subscribeIfNew(email: string): Promise<AxiosResponse<any>>;
+    unsubscribeIfNew(email: string): Promise<AxiosResponse<any>>;
     remove(email: string): Promise<AxiosResponse<any>>;
 };

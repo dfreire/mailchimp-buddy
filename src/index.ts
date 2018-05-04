@@ -37,6 +37,11 @@ export default function (config: Config) {
             return await axios.put(`${baseUrl}/${md5(email)}`, data, { headers });
         },
 
+        async unsubscribeIfNew(email: string) {
+            const data = { email_address: email, status_if_new: 'unsubscribed' };
+            return await axios.put(`${baseUrl}/${md5(email)}`, data, { headers });
+        },
+
         async remove(email: string) {
             return await axios.delete(`${baseUrl}/${md5(email)}`, { headers });
         },
