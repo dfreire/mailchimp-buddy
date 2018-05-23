@@ -6,14 +6,14 @@ export interface Config {
 export interface Member {
     id?: string;
     email_address: string;
-    status: 'subscribed' | 'unsubscribed' | 'cleaned' | 'pending' | 'transactional';
+    status: Status;
 }
+export declare type Status = 'subscribed' | 'unsubscribed' | 'cleaned' | 'pending' | 'transactional';
 export default function (config: Config): {
-    list(): Promise<AxiosResponse<any>>;
-    get(email: string): Promise<AxiosResponse<any>>;
-    subscribe(email: string): Promise<AxiosResponse<any>>;
-    unsubscribe(email: string): Promise<AxiosResponse<any>>;
-    subscribeIfNew(email: string): Promise<AxiosResponse<any>>;
-    unsubscribeIfNew(email: string): Promise<AxiosResponse<any>>;
-    remove(email: string): Promise<AxiosResponse<any>>;
+    list(): Promise<AxiosResponse<{
+        members: Member[];
+    }>>;
+    get(email: string): Promise<AxiosResponse<Member>>;
+    setStatus(email: string, status: Status): Promise<AxiosResponse<any>>;
+    setStatusIfNew(email: string, status: Status): Promise<AxiosResponse<any>>;
 };

@@ -9,45 +9,34 @@ export interface Config {
 export interface Member {
     id?: string;
     email_address: string;
-    status: 'subscribed' | 'unsubscribed' | 'cleaned' | 'pending' | 'transactional';
+    status: Status;
 }
 
+export type Status = 'subscribed' | 'unsubscribed' | 'cleaned' | 'pending' | 'transactional';
+
 export default function (config: Config) {
-    const baseUrl = `https://us18.api.mailchimp.com/3.0/lists/${config.listId}/members`;
+    const dataCenter = config.apiKey.split('-')[1];
+    const baseUrl = `https://${dataCenter}.api.mailchimp.com/3.0/lists/${config.listId}/members`;
     const authHeader = { Authorization: `apikey ${config.apiKey}` };
     const headers = { ...authHeader };
 
     return {
-        async list() {
-            return await axios.get(baseUrl, { headers });
+        async list(): Promise<AxiosResponse<{ members: Member[] }>> {
+            return await axios.get<{ members: Member[] }>(`${baseUrl}?count=1000000`, { headers });
         },
 
-        async get(email: string) {
-            return await axios.get(`${baseUrl}/${md5(email)}`, { headers });
+        async get(email: string): Promise<AxiosResponse<Member>> {
+            return await axios.get<Member>(`${baseUrl}/${md5(email)}`, { headers });
         },
 
-        async subscribe(email: string) {
-            const data = { status: 'subscribed' };
+        async setStatus(email: string, status: Status) {
+            const data = { status };
             return await axios.patch(`${baseUrl}/${md5(email)}`, data, { headers });
         },
 
-        async unsubscribe(email: string) {
-            const data = { status: 'unsubscribed' };
-            return await axios.patch(`${baseUrl}/${md5(email)}`, data, { headers });
-        },
-
-        async subscribeIfNew(email: string) {
-            const data = { email_address: email, status_if_new: 'subscribed' };
+        async setStatusIfNew(email: string, status: Status) {
+            const data = { email_address: email, status_if_new: status };
             return await axios.put(`${baseUrl}/${md5(email)}`, data, { headers });
-        },
-
-        async unsubscribeIfNew(email: string) {
-            const data = { email_address: email, status_if_new: 'unsubscribed' };
-            return await axios.put(`${baseUrl}/${md5(email)}`, data, { headers });
-        },
-
-        async remove(email: string) {
-            return await axios.delete(`${baseUrl}/${md5(email)}`, { headers });
         },
     }
 }
