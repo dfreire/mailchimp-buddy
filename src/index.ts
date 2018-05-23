@@ -38,6 +38,10 @@ export default function (config: Config) {
             const data = { email_address: email, status_if_new: status };
             return await axios.put(`${baseUrl}/${md5(email)}`, data, { headers });
         },
+
+        async remove(email: string) {
+            return await axios.delete(`${baseUrl}/${md5(email)}`, { headers });
+        },
     }
 }
 

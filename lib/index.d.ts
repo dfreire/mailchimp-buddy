@@ -16,4 +16,5 @@ export default function (config: Config): {
     get(email: string): Promise<AxiosResponse<Member>>;
     setStatus(email: string, status: Status): Promise<AxiosResponse<any>>;
     setStatusIfNew(email: string, status: Status): Promise<AxiosResponse<any>>;
+    remove(email: string): Promise<AxiosResponse<any>>;
 };
