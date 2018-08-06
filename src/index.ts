@@ -25,8 +25,8 @@ export default function (config: Config) {
             return await axios.get<{ members: Member[] }>(`${baseUrl}?count=${count}&offset=${offset}`, { headers });
         },
 
-        async get(email: string): Promise<AxiosResponse<Member>> {
-            return await axios.get<Member>(`${baseUrl}/${md5(email)}`, { headers });
+        async get(emailOrMd5: string): Promise<AxiosResponse<Member>> {
+            return await axios.get<Member>(`${baseUrl}/${ensureMd5(emailOrMd5)}`, { headers });
         },
 
         async setStatus(email: string, status: Status) {
@@ -35,14 +35,23 @@ export default function (config: Config) {
         },
 
         async setStatusIfNew(email: string, status: Status) {
-            const data = { email_address: email, status_if_new: status };
+            const data = { email_address: email.toLowerCase(), status_if_new: status };
             return await axios.put(`${baseUrl}/${md5(email)}`, data, { headers });
         },
 
-        async remove(email: string) {
-            return await axios.delete(`${baseUrl}/${md5(email)}`, { headers });
+        async remove(emailOrMd5: string) {
+            return await axios.delete(`${baseUrl}/${ensureMd5(emailOrMd5)}`, { headers });
         },
     }
+}
+
+function ensureMd5(emailOrMd5: string): string {
+    return isEmail(emailOrMd5) ? md5(emailOrMd5) : emailOrMd5;
+}
+
+function isEmail(emailOrMd5: string): boolean {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(emailOrMd5).toLowerCase());
 }
 
 function md5(email: string) {
