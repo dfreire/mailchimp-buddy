@@ -10,7 +10,7 @@ export interface Member {
 }
 export declare type Status = 'subscribed' | 'unsubscribed' | 'cleaned' | 'pending' | 'transactional';
 export default function (config: Config): {
-    list(): Promise<AxiosResponse<{
+    list(count?: number, offset?: number): Promise<AxiosResponse<{
         members: Member[];
     }>>;
     get(email: string): Promise<AxiosResponse<Member>>;

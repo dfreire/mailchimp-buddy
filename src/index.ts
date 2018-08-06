@@ -21,8 +21,8 @@ export default function (config: Config) {
     const headers = { ...authHeader };
 
     return {
-        async list(): Promise<AxiosResponse<{ members: Member[] }>> {
-            return await axios.get<{ members: Member[] }>(`${baseUrl}?count=1000000`, { headers });
+        async list(count = 1000000, offset = 0): Promise<AxiosResponse<{ members: Member[] }>> {
+            return await axios.get<{ members: Member[] }>(`${baseUrl}?count=${count}&offset=${offset}`, { headers });
         },
 
         async get(email: string): Promise<AxiosResponse<Member>> {
